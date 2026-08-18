@@ -37,10 +37,12 @@ wss.on("connection",(socket)=>{
 
             
             allSocket.forEach((s)=>{
-                if(s.roomId===currentRoomId){
-                    s.socket.send(
-                            parsedMessage.payload.message
-                    )
+                if(s.roomId===currentRoomId && s.socket!==socket){
+                    s.socket.send(JSON.stringify({
+                        status: "receiver",                        
+                        message: parsedMessage.payload.message
+                        
+                    }));
                 }
             })
         }
