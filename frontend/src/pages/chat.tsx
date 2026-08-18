@@ -39,16 +39,19 @@ const Chat = ({ webSocket }: ChatProps) => {
     };
 
     return (
-        <div className='flex min-h-full justify-center items-center'>
-            <div>
-                <h1 className='text-4xl font-bold mb-4'>Chat Room</h1>
-                <div className='flex  flex-col space-y-4'>
+        <div className='flex min-h-screen justify-center items-center'>
+            <div className='min-h-full'>
+                <h1 className='text-4xl font-bold mb-4 text-center'>Chat Room</h1>
+                <div className='flex  flex-col space-y-4 bg-gray-500 p-8 rounded-2xl h-[400px] mb-32'>
+                     <div className='flex flex-col space-y-4 flex-1 overflow-y-auto'>
+
                     {messages.map((msg, index) => (
                         <div key={index} className={`p-2 rounded ${msg.sender === 'user' ? 'bg-blue-500 text-white self-end' : 'bg-gray-300 text-black self-start'}`}>
                             {msg.content}
                         </div>
                     ))}
-                    <div className='flex space-x-4'>
+                    </div>
+                    <div className='flex space-x-1'>
                     <input
                         ref={inputRef}
                         type="text"
