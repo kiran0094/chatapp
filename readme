@@ -1,0 +1,263 @@
+Real-Time Chat App
+
+A simple real-time chat application that allows users to join chat rooms and exchange messages instantly using WebSockets.
+
+📸 Overview
+
+The application provides a room-based chat experience:
+
+Users enter a Room ID to join a chat room.
+Multiple users can join the same room.
+Messages are delivered to all users in the same room in real time.
+WebSockets maintain a persistent connection between the client and server.
+Messages are displayed differently depending on whether they were sent by the current user or another participant.
+✨ Features
+🔗 Room-based chat — Join a specific room using a Room ID.
+⚡ Real-time messaging — Messages are delivered instantly using WebSockets.
+👥 Multiple users — Multiple clients can communicate within the same room.
+💬 Live message updates — No page refresh is required to receive messages.
+🎨 Responsive chat interface — Simple and clean chat-room UI.
+🔄 Persistent WebSocket connection — Enables continuous two-way communication between client and server.
+🏗️ How It Works
+
+The application follows a simple client-server architecture:
+
+┌──────────────┐
+│    Client    │
+│              │
+│  Join Room   │
+│  Send Message│
+└──────┬───────┘
+       │
+       │ WebSocket
+       ▼
+┌────────────────────┐
+│   WebSocket Server │
+│                    │
+│  Room Management   │
+│  Message Routing   │
+└─────────┬──────────┘
+          │
+          │ Broadcast
+          ▼
+   ┌───────────────┐
+   │ Users in Room │
+   └───────────────┘
+
+Room Logic
+
+When a client connects, it can join a room by providing a Room ID.
+
+The server maintains a collection of rooms and their connected clients.
+
+For example:
+
+Room A
+ ├── Client 1
+ ├── Client 2
+ └── Client 3
+
+Room B
+ ├── Client 4
+ └── Client 5
+
+
+When Client 1 sends a message in Room A, the server broadcasts that message only to the clients connected to Room A.
+
+Clients in Room B do not receive the message.
+
+🔄 Message Flow
+The user enters a Room ID.
+The client establishes a WebSocket connection with the server.
+The client sends a request to join the specified room.
+The server adds the client to that room.
+When the user sends a message, it is sent through the WebSocket.
+The server receives the message.
+The server broadcasts the message to other clients in the same room.
+Connected clients receive the message and update their chat interface immediately.
+User
+  │
+  │ Send message
+  ▼
+Client
+  │
+  │ WebSocket
+  ▼
+Server
+  │
+  │ Find user's room
+  ▼
+Room
+  │
+  │ Broadcast message
+  ▼
+Other connected clients
+
+🧩 Project Structure
+
+A typical project structure can look like this:
+
+chat-app/
+│
+├── client/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── pages/
+│   │   ├── App.*
+│   │   └── main.*
+│   └── package.json
+│
+├── server/
+│   ├── src/
+│   │   ├── websocket/
+│   │   ├── rooms/
+│   │   └── server.*
+│   └── package.json
+│
+├── README.md
+└── package.json
+
+
+The exact structure depends on the framework and technologies used in the project.
+
+🚀 Getting Started
+1. Clone the repository
+git clone <repository-url>
+cd chat-app
+
+2. Install dependencies
+
+Install the dependencies for both the client and server according to the project's package configuration.
+
+npm install
+
+3. Start the server
+npm run server
+
+4. Start the client
+npm run dev
+
+
+The application should now be available in your browser.
+
+💻 Usage
+Create or Join a Room
+Open the application.
+Enter a Room ID.
+Click Join Room.
+Open the application in another browser window or device.
+Enter the same Room ID.
+Start sending messages.
+
+Example:
+
+User A                         User B
+   │                              │
+   │       Room: "general"        │
+   └──────────────┬───────────────┘
+                  │
+             Chat Room
+                  │
+       ┌──────────┴──────────┐
+       │                     │
+   "Hello!"              "Hi!"
+
+🔌 WebSocket Communication
+
+WebSockets provide full-duplex communication between the client and server over a single persistent connection.
+
+A simplified client connection looks like:
+
+const socket = new WebSocket("ws://localhost:PORT");
+
+socket.onmessage = (event) => {
+  const message = JSON.parse(event.data);
+  // Update chat UI
+};
+
+socket.send(JSON.stringify({
+  type: "message",
+  roomId: "general",
+  message: "Hello!"
+}));
+
+
+The server is responsible for:
+
+Accepting WebSocket connections.
+Tracking connected clients.
+Managing rooms.
+Adding and removing users from rooms.
+Receiving messages.
+Broadcasting messages to the correct room.
+Handling client disconnections.
+🧠 Room Management
+
+Conceptually, rooms can be represented using a map:
+
+const rooms = new Map();
+
+// Example
+rooms.set("general", new Set([
+  client1,
+  client2,
+  client3
+]));
+
+
+When a client joins:
+
+joinRoom("general", client)
+        ↓
+Find "general"
+        ↓
+Add client to room
+        ↓
+Client can now receive messages
+
+
+When a client disconnects, the server removes that client from its room. Empty rooms can also be removed to avoid unnecessary memory usage.
+
+🔐 Security Considerations
+
+For a production application, consider adding:
+
+Authentication and authorization.
+Input validation and message-size limits.
+Rate limiting to prevent spam.
+HTTPS/WSS instead of plain HTTP/WS.
+Protection against malicious WebSocket messages.
+Proper cleanup of disconnected clients.
+Server-side validation of Room IDs.
+🛠️ Technologies
+
+Update this section with the technologies used in the project.
+
+Frontend: HTML / CSS / JavaScript or your chosen frontend framework
+Backend: Node.js / your chosen backend framework
+Communication: WebSockets
+Protocol: WebSocket
+Room Management: Server-side in-memory room collection
+🎯 Future Improvements
+
+Possible improvements include:
+
+ Usernames and user profiles
+ User join/leave notifications
+ Typing indicators
+ Online user list
+ Message timestamps
+ Message history
+ Persistent database storage
+ Private messaging
+ Authentication
+ File and image sharing
+ Room creation and expiration
+ Reconnection handling
+📄 License
+
+This project is available for educational and personal use. Add the appropriate license here if the project is distributed publicly.
+
+Author
+
+Built as a real-time chat application demonstrating WebSocket communication and room-based message routing.

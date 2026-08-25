@@ -70,7 +70,7 @@ function App() {
       </Routes>
 
       <div className="fixed bottom-0 left-0 w-full bg-gray-800 text-white py-4">
-        <p className="text-center">© 2024 Chat App. All rights reserved.</p>
+        <p className="text-center">Chat App. made with ❤️ kiran.</p>
       </div>
     </>
   )
